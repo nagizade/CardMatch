@@ -9,3 +9,6 @@ A matching game which requires player to match similar elements.
 1. Open Android Studio
 2. Select `Check out project from Version Control` -> `Git`
 3. Put this repository url into `URL` section and click `Clone`
+
+# License
+See LICENSE.md
