@@ -1,31 +1,22 @@
 package com.nagizade.cardmatch
 
 import android.content.Context
-import android.opengl.Visibility
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
-import android.view.MotionEvent
-import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.nagizade.cardmatch.DeckInterface.*
-import kotlinx.android.synthetic.main.activity_main.*
+import com.nagizade.cardmatch.DeckInterface.View
+import com.nagizade.cardmatch.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity(),View {
 
-    lateinit var rv: RecyclerView;
-    lateinit var tvSteps: TextView
-    lateinit var tvStepsLabel: TextView
-    lateinit var endingLayout: ConstraintLayout
-    lateinit var playAgainButton: Button
     private lateinit var presenter : DeckPresenter
-
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
 
         presenter = DeckPresenter(this)
         presenter.beginGame()
@@ -36,26 +27,26 @@ class MainActivity : AppCompatActivity(),View {
     }
 
     override fun startGame() {
-        tvSteps.text = "0"
+        binding.stepCounterText.text = "0"
 
-        rv.visibility           = android.view.View.VISIBLE
-        tvSteps.visibility      = android.view.View.VISIBLE
-        tvStepsLabel.visibility = android.view.View.VISIBLE
-        endingLayout.visibility = android.view.View.GONE
+        binding.deckRecycler.visibility     = android.view.View.VISIBLE
+        binding.stepCounterText.visibility  = android.view.View.VISIBLE
+        binding.stepsText.visibility        = android.view.View.VISIBLE
+        binding.endingLayout.visibility     = android.view.View.GONE
 
-        rv.layoutManager = GridLayoutManager(this, 3)
-        rv.adapter = presenter.getAdapter()
+        binding.deckRecycler.layoutManager = GridLayoutManager(this, 3)
+        binding.deckRecycler.adapter = presenter.getAdapter()
     }
 
     override fun showEnding() {
-        rv.visibility           = android.view.View.GONE
-        tvSteps.visibility      = android.view.View.GONE
-        tvStepsLabel.visibility = android.view.View.GONE
-        endingLayout.visibility = android.view.View.VISIBLE
+        binding.deckRecycler.visibility           = android.view.View.GONE
+        binding.stepCounterText.visibility      = android.view.View.GONE
+        binding.stepsText.visibility = android.view.View.GONE
+        binding.endingLayout.visibility = android.view.View.VISIBLE
     }
 
     override fun refreshData(position: Int) {
-        rv.adapter?.notifyItemChanged(position)
+        binding.deckRecycler.adapter?.notifyItemChanged(position)
     }
 
     override fun showToast(message: String) {
@@ -63,7 +54,7 @@ class MainActivity : AppCompatActivity(),View {
     }
 
     override fun updateSteps(value: Int) {
-        tvSteps.text = value.toString()
+        binding.stepCounterText.text = value.toString()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -72,18 +63,12 @@ class MainActivity : AppCompatActivity(),View {
     }
 
     override fun bind() {
-        rv = findViewById(R.id.deck_recycler)
-        tvSteps = findViewById(R.id.stepCounter_text)
-        tvStepsLabel = findViewById(R.id.steps_text)
-        endingLayout = findViewById(R.id.ending_layout)
-        playAgainButton = findViewById(R.id.playagain_button)
-
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.title = ""
 
-        playAgainButton.setOnClickListener {
+        binding.playagainButton.setOnClickListener {
             presenter.beginGame()
         }
     }
