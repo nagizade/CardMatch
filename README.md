@@ -1,5 +1,5 @@
 # Card Match
-A matching game which requires player to match similar elements.
+My implementation of image matching game written in Kotlin. 
 
 # Screenshots
 
